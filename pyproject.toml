@@ -26,8 +26,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/rodrigobnogueira/faker-ecommerce"
-Repository = "https://github.com/rodrigobnogueira/faker-ecommerce"
+Homepage = "https://github.com/rodrigobnogueira/faker-ecommerce-provider"
+Repository = "https://github.com/rodrigobnogueira/faker-ecommerce-provider"
+Documentation = "https://github.com/rodrigobnogueira/faker-ecommerce-provider#readme"
 
 [tool.setuptools.packages.find]
 where = ["."]

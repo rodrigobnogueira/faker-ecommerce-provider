@@ -55,6 +55,52 @@ class EcommerceProvider(BaseProvider):
         "Handcrafted",
     )
 
+    brand_names: ElementsType[str] = (
+        "Apple",
+        "Samsung",
+        "Sony",
+        "Nike",
+        "Adidas",
+        "Amazon Basics",
+        "Bose",
+        "LG",
+        "Dell",
+        "HP",
+        "Lenovo",
+        "Logitech",
+        "JBL",
+        "Canon",
+        "Philips",
+        "Panasonic",
+        "Dyson",
+        "KitchenAid",
+        "Cuisinart",
+        "Levi's",
+    )
+
+    product_types: ElementsType[str] = (
+        "Headphones",
+        "Laptop",
+        "Smartphone",
+        "Tablet",
+        "Smartwatch",
+        "Speaker",
+        "Camera",
+        "Monitor",
+        "Keyboard",
+        "Mouse",
+        "Backpack",
+        "Sneakers",
+        "Jacket",
+        "Blender",
+        "Coffee Maker",
+        "Vacuum Cleaner",
+        "Air Purifier",
+        "Water Bottle",
+        "Fitness Tracker",
+        "Gaming Chair",
+    )
+
     product_materials: ElementsType[str] = (
         "Cotton",
         "Leather",
@@ -95,6 +141,7 @@ class EcommerceProvider(BaseProvider):
         "Purolator",
         "OnTrac",
         "LaserShip",
+        "Correios",
     )
 
     payment_methods: ElementsType[str] = (
@@ -197,11 +244,22 @@ class EcommerceProvider(BaseProvider):
     def product_category(self) -> str:
         return self.random_element(self.product_categories)
 
-    def product_name(self) -> str:
+    def brand_name(self) -> str:
+        return self.random_element(self.brand_names)
+
+    def product_name(self, include_brand: bool = False) -> str:
+        adjective = self.random_element(self.product_adjectives)
+        product_type = self.random_element(self.product_types)
+        if include_brand:
+            brand = self.random_element(self.brand_names)
+            return f"{brand} {adjective} {product_type}"
+        return f"{adjective} {product_type}"
+
+    def product_description(self) -> str:
         adjective = self.random_element(self.product_adjectives)
         material = self.random_element(self.product_materials)
-        category = self.random_element(self.product_categories)
-        return f"{adjective} {material} {category} Item"
+        product_type = self.random_element(self.product_types)
+        return f"A {adjective.lower()} {product_type.lower()} made with high-quality {material.lower()}."
 
     def shipping_carrier(self) -> str:
         return self.random_element(self.shipping_carriers)
@@ -219,27 +277,38 @@ class EcommerceProvider(BaseProvider):
         return self.random_element(self.return_reasons)
 
     def sku(self) -> str:
-        letters = self.random_uppercase_letter() + self.random_uppercase_letter() + self.random_uppercase_letter()
+        letters = "".join(self.random_uppercase_letter() for _ in range(3))
         numbers = str(self.random_int(min=1000, max=9999))
-        suffix = self.random_uppercase_letter() + self.random_uppercase_letter()
+        suffix = "".join(self.random_uppercase_letter() for _ in range(2))
         return f"{letters}-{numbers}-{suffix}"
 
     def order_id(self) -> str:
         return f"ORD-{self.random_int(min=100000000, max=999999999)}"
 
-    def tracking_number(self) -> str:
-        prefix = "1Z" if self.random_int(0, 1) else ""
+    def tracking_number(self, carrier: str | None = None) -> str:
+        carrier = carrier or self.random_element(self.shipping_carriers)
+        if carrier == "UPS":
+            alpha = "".join(self.random_uppercase_letter() for _ in range(4))
+            return f"1Z{alpha}{self.random_int(min=1000000000, max=9999999999)}"
+        if carrier == "FedEx":
+            return str(self.random_int(min=100000000000, max=999999999999))
+        if carrier == "USPS":
+            return f"9400{self.random_int(min=1000000000000000, max=9999999999999999)}"
+        if carrier in ("Correios", "Correos"):
+            alpha = "".join(self.random_uppercase_letter() for _ in range(2))
+            return f"{alpha}{self.random_int(min=100000000, max=999999999)}BR"
+        if carrier == "DHL":
+            return str(self.random_int(min=1000000000, max=9999999999))
         alpha = "".join(self.random_uppercase_letter() for _ in range(4))
-        digits = str(self.random_int(min=1000000000, max=9999999999))
-        return f"{prefix}{alpha}{digits}"
+        return f"{alpha}{self.random_int(min=1000000000, max=9999999999)}"
 
     def coupon_code(self) -> str:
         prefix = self.random_element(self.coupon_prefixes)
         suffix = str(self.random_int(min=10, max=99))
         return f"{prefix}{suffix}"
 
-    def price(self) -> str:
-        dollars = self.random_int(min=1, max=999)
+    def price(self, min_dollars: int = 1, max_dollars: int = 999) -> str:
+        dollars = self.random_int(min=min_dollars, max=max_dollars)
         cents = self.random_int(min=0, max=99)
         return f"${dollars}.{cents:02d}"
 
@@ -248,3 +317,18 @@ class EcommerceProvider(BaseProvider):
 
     def review_rating(self) -> int:
         return self.random_int(min=1, max=5)
+
+    def full_order(self) -> dict[str, str | int]:
+        carrier = self.shipping_carrier()
+        return {
+            "order_id": self.order_id(),
+            "product": self.product_name(include_brand=True),
+            "sku": self.sku(),
+            "price": self.price(),
+            "payment_method": self.payment_method(),
+            "customer_type": self.customer_type(),
+            "status": self.order_status(),
+            "carrier": carrier,
+            "tracking_number": self.tracking_number(carrier=carrier),
+            "review_rating": self.review_rating(),
+        }
