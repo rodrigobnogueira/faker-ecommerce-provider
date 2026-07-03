@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "faker-ecommerce-provider"
-version = "1.1.0"
-description = "Generate realistic e-commerce test data: products, SKUs, orders, 20+ carriers, 20+ payment methods, coupons, reviews, and more"
+version = "1.2.0"
+description = "Generate realistic e-commerce test data: products, SKUs, orders, 25+ carriers, 25+ payment methods, coupons, reviews, and more"
 readme = "README.md"
 authors = [{name = "Rodrigo Nogueira", email = "rodrigo.b.nogueira@gmail.com"}]
 license = {text = "MIT"}
@@ -19,6 +19,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 requires-python = ">=3.10"
 dependencies = [

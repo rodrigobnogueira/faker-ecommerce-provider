@@ -168,6 +168,87 @@ class TestEcommerceProvider:
         # Generate a batch of IDs and ensure they are unique
         ids = {faker.order_id() for _ in range(1000)}
         assert len(ids) == 1000, "Order IDs should be unique"
-        
+
         skus = {faker.sku() for _ in range(1000)}
         assert len(skus) == 1000, "SKUs should be unique"
+
+
+class TestCatalogRefresh2026:
+    """Focused tests for the 2026 global commerce catalog refresh."""
+
+    def test_catalogs_have_no_duplicates(self):
+        catalog_names = (
+            "product_categories",
+            "product_adjectives",
+            "brand_names",
+            "product_types",
+            "product_materials",
+            "shipping_carriers",
+            "payment_methods",
+            "order_statuses",
+            "customer_types",
+            "return_reasons",
+            "coupon_prefixes",
+        )
+        for name in catalog_names:
+            catalog = getattr(EcommerceProvider, name)
+            assert len(set(catalog)) == len(catalog), f"Duplicate entries in {name}"
+
+    def test_global_payment_methods_present(self):
+        expected = (
+            "Pix",
+            "Alipay",
+            "WeChat Pay",
+            "iDEAL",
+            "UPI",
+            "Cash App Pay",
+            "Samsung Pay",
+            "Mercado Pago",
+            "Revolut Pay",
+        )
+        for method in expected:
+            assert method in EcommerceProvider.payment_methods, f"{method} missing"
+
+    def test_global_shipping_carriers_present(self):
+        expected = (
+            "DPD",
+            "Evri",
+            "InPost",
+            "SF Express",
+            "Yamato Transport",
+            "Aramex",
+            "Poste Italiane",
+        )
+        for carrier in expected:
+            assert carrier in EcommerceProvider.shipping_carriers, f"{carrier} missing"
+
+    def test_current_product_types_present(self):
+        expected = ("Wireless Earbuds", "Air Fryer", "Robot Vacuum", "Power Bank", "E-Reader")
+        for product_type in expected:
+            assert product_type in EcommerceProvider.product_types, f"{product_type} missing"
+
+    def test_current_brands_present(self):
+        expected = ("Xiaomi", "Anker", "Garmin", "Nintendo", "New Balance")
+        for brand in expected:
+            assert brand in EcommerceProvider.brand_names, f"{brand} missing"
+
+    def test_current_categories_present(self):
+        expected = ("Smart Home", "Luggage & Travel", "Appliances")
+        for category in expected:
+            assert category in EcommerceProvider.product_categories, f"{category} missing"
+
+    def test_fulfillment_order_statuses_present(self):
+        expected = ("Ready for Pickup", "Delivery Attempted", "Held at Customs")
+        for status in expected:
+            assert status in EcommerceProvider.order_statuses, f"{status} missing"
+
+    def test_royal_mail_tracking_format(self):
+        fake = Faker()
+        fake.add_provider(EcommerceProvider)
+        for _ in range(100):
+            tracking = fake.tracking_number(carrier="Royal Mail")
+            # UPU S10 format: two letters, nine digits, "GB" country suffix.
+            assert len(tracking) == 13
+            assert tracking[:2].isalpha() and tracking[:2].isupper()
+            assert tracking[2:11].isdigit()
+            assert tracking.endswith("GB")
