@@ -30,6 +30,11 @@ class EcommerceProvider(BaseProvider):
         "Video Games",
         "Arts & Crafts",
         "Musical Instruments",
+        "Smart Home",
+        "Luggage & Travel",
+        "Appliances",
+        "Party Supplies",
+        "Collectibles",
     )
 
     product_adjectives: ElementsType[str] = (
@@ -76,6 +81,16 @@ class EcommerceProvider(BaseProvider):
         "KitchenAid",
         "Cuisinart",
         "Levi's",
+        "Xiaomi",
+        "ASUS",
+        "Anker",
+        "Garmin",
+        "Nintendo",
+        "Microsoft",
+        "New Balance",
+        "Puma",
+        "The North Face",
+        "Nespresso",
     )
 
     product_types: ElementsType[str] = (
@@ -99,6 +114,16 @@ class EcommerceProvider(BaseProvider):
         "Water Bottle",
         "Fitness Tracker",
         "Gaming Chair",
+        "Wireless Earbuds",
+        "Air Fryer",
+        "Robot Vacuum",
+        "Power Bank",
+        "Webcam",
+        "Drone",
+        "E-Reader",
+        "Yoga Mat",
+        "Electric Toothbrush",
+        "Desk Lamp",
     )
 
     product_materials: ElementsType[str] = (
@@ -142,6 +167,13 @@ class EcommerceProvider(BaseProvider):
         "OnTrac",
         "LaserShip",
         "Correios",
+        "DPD",
+        "Evri",
+        "InPost",
+        "SF Express",
+        "Yamato Transport",
+        "Aramex",
+        "Poste Italiane",
     )
 
     payment_methods: ElementsType[str] = (
@@ -165,6 +197,15 @@ class EcommerceProvider(BaseProvider):
         "Shop Pay",
         "Zip",
         "Sezzle",
+        "Pix",
+        "Alipay",
+        "WeChat Pay",
+        "iDEAL",
+        "UPI",
+        "Cash App Pay",
+        "Samsung Pay",
+        "Mercado Pago",
+        "Revolut Pay",
     )
 
     order_statuses: ElementsType[str] = (
@@ -183,6 +224,11 @@ class EcommerceProvider(BaseProvider):
         "Partially Shipped",
         "Awaiting Payment",
         "Payment Failed",
+        "Ready for Pickup",
+        "Delivery Attempted",
+        "Held at Customs",
+        "Delayed",
+        "Return in Transit",
     )
 
     customer_types: ElementsType[str] = (
@@ -297,6 +343,9 @@ class EcommerceProvider(BaseProvider):
         if carrier in ("Correios", "Correos"):
             alpha = "".join(self.random_uppercase_letter() for _ in range(2))
             return f"{alpha}{self.random_int(min=100000000, max=999999999)}BR"
+        if carrier == "Royal Mail":
+            alpha = "".join(self.random_uppercase_letter() for _ in range(2))
+            return f"{alpha}{self.random_int(min=100000000, max=999999999)}GB"
         if carrier == "DHL":
             return str(self.random_int(min=1000000000, max=9999999999))
         alpha = "".join(self.random_uppercase_letter() for _ in range(4))
