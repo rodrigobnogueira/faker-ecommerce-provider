@@ -1,5 +1,6 @@
 import pytest
 from faker import Faker
+
 from faker_ecommerce import EcommerceProvider
 
 
@@ -27,7 +28,7 @@ class TestEcommerceProvider:
             result_branded = faker.product_name(include_brand=True)
             assert isinstance(result_branded, str)
             assert len(result_branded.split()) >= 3
-            
+
             # Check if any brand name is at the start of the result
             found_brand = False
             for brand in EcommerceProvider.brand_names:
@@ -116,7 +117,7 @@ class TestEcommerceProvider:
             assert isinstance(result, str)
             assert result.startswith("$")
             assert "." in result
-            
+
             # Test limits
             min_val = 10
             max_val = 50
@@ -150,17 +151,17 @@ class TestEcommerceProvider:
             assert "carrier" in order
             assert "tracking_number" in order
             assert "review_rating" in order
-            
+
             # Check consistency between carrier and tracking number
             carrier = order["carrier"]
             tracking = order["tracking_number"]
-            
+
             if carrier == "UPS":
                 assert tracking.startswith("1Z")
             elif carrier == "USPS":
                 assert tracking.startswith("9400")
             elif carrier in ("Correios", "Correos"):
-                assert tracking.endswith("BR") or tracking[-2:].isalpha() # Correos might not end in BR but Correios does
+                assert tracking.endswith("BR") or tracking[-2:].isalpha()  # Correos might not end in BR but Correios does
                 if carrier == "Correios":
                     assert tracking.endswith("BR")
 

@@ -21,17 +21,17 @@ fake = Faker()
 fake.add_provider(EcommerceProvider)
 
 # Basic usage
-fake.product_name()       # 'Premium Leather Electronics Item'
-fake.product_name(include_brand=True) # 'Sony Modern Wireless Headphones'
-fake.brand_name()         # 'Samsung'
-fake.product_description() # 'A modern headphones made with high-quality stainless steel.'
-fake.sku()                # 'ABC-1234-XY'
-fake.order_id()           # 'ORD-123456789'
-fake.tracking_number()    # '1ZABCD1234567890'
-fake.tracking_number(carrier="USPS") # '9400100000000000000000'
-fake.price()              # '$49.99'
-fake.shipping_carrier()   # 'FedEx'
-fake.payment_method()     # 'Apple Pay'
+fake.product_name()  # 'Premium Leather Electronics Item'
+fake.product_name(include_brand=True)  # 'Sony Modern Wireless Headphones'
+fake.brand_name()  # 'Samsung'
+fake.product_description()  # 'A modern headphones made with high-quality stainless steel.'
+fake.sku()  # 'ABC-1234-XY'
+fake.order_id()  # 'ORD-123456789'
+fake.tracking_number()  # '1ZABCD1234567890'
+fake.tracking_number(carrier="USPS")  # '9400100000000000000000'
+fake.price()  # '$49.99'
+fake.shipping_carrier()  # 'FedEx'
+fake.payment_method()  # 'Apple Pay'
 
 # Generate a complete order
 order = fake.full_order()
