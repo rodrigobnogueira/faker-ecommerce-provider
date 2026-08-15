@@ -80,9 +80,23 @@ print(order)
 To run the tests, install the dependencies and run pytest:
 
 ```bash
-pip install .[dev]
-pytest tests/
+pip install -e ".[dev]"
+pytest
 ```
+
+The same `dev` extra installs the lint and type-check tools CI runs:
+
+```bash
+ruff check .
+ruff format --check .
+mypy --ignore-missing-imports --no-strict-optional .
+```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for supported versions, local setup, the
+seeded-determinism rules, and what a catalog change needs before it can be
+merged.
 
 ## License
 
