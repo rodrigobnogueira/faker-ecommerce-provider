@@ -10,9 +10,21 @@ test data. Keep changes small, data-focused, and easy to verify.
   methods, statuses, and so on) as plain tuples on `EcommerceProvider`.
 - Prefer adding focused tests in `tests/test_provider.py` when changing catalog
   behavior or generation formats.
-- Run `python -m pytest` before opening a PR when dependencies are available.
+- Run the full check set before opening a PR when dependencies are available:
+  `python -m pytest`, `python -m ruff check .`, `python -m ruff format --check .`,
+  and `python -m mypy --ignore-missing-imports --no-strict-optional .`.
 - Do not include local environment files such as `.venv/`, `.pytest_cache/`, or
   editor files in commits.
+- `CONTRIBUTING.md` is the contributor-facing distillation of this file. When a
+  rule here changes, update `CONTRIBUTING.md` in the same commit so the two
+  cannot drift.
+
+## Tooling and CI
+
+- CI must run every tool the `dev` extra declares. A tool that is installed but
+  never invoked is either wired into `.github/workflows/tests.yml` or dropped
+  from the extra — there is no third option. Keep the CI arguments identical to
+  the ones in `.pre-commit-config.yaml`.
 
 ## Catalog Updates
 
@@ -52,3 +64,8 @@ steps, not the judgment ones; the manual `twine upload` flow remains a valid fal
 - Upload the checked wheel and source distribution to PyPI with Twine or the repository's configured trusted-publishing workflow.
 - After publishing, verify the new version is visible on PyPI and that the git tag points at the release commit.
 - Download the published package from PyPI into a fresh environment and run a smoke test against the installed package.
+- After any repository or package rename, update every metadata surface that
+  still carries the old name in the same change: `[project.urls]`, README badges
+  and links, the GitHub About field, and the docs. For PyPI, pair the URL fix
+  with a patch release — the registry serves the metadata of the last published
+  version, so without one it keeps showing the stale links.
