@@ -10,11 +10,11 @@ you change a rule in one, change it in the other in the same commit.
 
 ## Supported versions
 
-- **Python 3.10 – 3.14.** `requires-python` is `>=3.10` and the classifiers list
-  3.10 through 3.14; CI runs the test suite on every one of them.
+- **Python 3.11 – 3.15.** `requires-python` is `>=3.11` and the classifiers list
+  3.11 through 3.15; CI runs the test suite on every one of them.
 - **Faker >= 18.0.0**, the only runtime dependency. Keep it that way — new
   tooling belongs in the `dev` extra, not in `dependencies`.
-- Anything you write must run on 3.10, so no syntax or stdlib API newer than
+- Anything you write must run on 3.11, so no syntax or stdlib API newer than
   that.
 
 ## Local setup
